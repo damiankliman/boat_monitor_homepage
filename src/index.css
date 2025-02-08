@@ -43,3 +43,15 @@ h1 {
   line-height: 1.2;
   margin: 0;
 }
+
+h2 {
+  font-size: 1.8em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+h3 {
+  font-size: 1.3em;
+  line-height: 1.2;
+  margin: 0;
+}
