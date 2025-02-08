@@ -16,7 +16,7 @@ export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 32px;
   padding: 16px;
   width: auto;
   max-width: 800px;

@@ -21,8 +21,6 @@ const BOATS_TO_DISPLAY = [
 ];
 
 function App() {
-  // const { data } = useThingSpeakData(2605389, "2025-02-08T07:40:25Z");
-
   return (
     <>
       <HeaderContainer>

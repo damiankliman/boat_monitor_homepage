@@ -512,6 +512,8 @@ type BoatMonitorProps = {
 const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
   const { name, thingSpeakChannelId, monitors } = boat;
 
+  // const { data } = useThingSpeakData(2605389, "2025-02-08T07:40:25Z");
+
   return (
     <BoatMonitorContainer>
       <ChartsHeaderContainer>
