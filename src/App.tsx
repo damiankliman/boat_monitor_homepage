@@ -1,6 +1,10 @@
+import { useThingSpeakData } from "@/hooks/useThingSpeakData";
 import { HeaderContainer } from "./styles";
 
 function App() {
+  const { data } = useThingSpeakData(2605389, 10);
+  console.log(data);
+
   return (
     <>
       <HeaderContainer>
