@@ -4,25 +4,31 @@ import type { ThingSpeakResponse } from "@/types/thingSpeakTypes";
 
 interface FetchParams {
   channelId: number;
-  results?: number;
+  start?: string;
+  end?: string;
 }
 
 const DEFAULT_STALE_TIME = 1000 * 60;
 
 const fetchThingSpeakData = async ({
   channelId,
-  results = 10,
+  start,
+  end,
 }: FetchParams): Promise<ThingSpeakResponse> => {
   const response = await thingSpeakClient.get(`/${channelId}/feeds.json`, {
-    params: { results },
+    params: { start, end },
   });
   return response.data;
 };
 
-export const useThingSpeakData = (channelId: number, results = 10) => {
+export const useThingSpeakData = (
+  channelId: number,
+  start?: string,
+  end?: string
+) => {
   return useQuery({
-    queryKey: ["thingSpeakData", channelId, results],
-    queryFn: () => fetchThingSpeakData({ channelId, results }),
+    queryKey: ["thingSpeakData", channelId, start, end],
+    queryFn: () => fetchThingSpeakData({ channelId, start, end }),
     staleTime: DEFAULT_STALE_TIME,
   });
 };

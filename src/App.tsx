@@ -2,8 +2,7 @@ import { useThingSpeakData } from "@/hooks/useThingSpeakData";
 import { HeaderContainer } from "./styles";
 
 function App() {
-  const { data } = useThingSpeakData(2605389, 10);
-  console.log(data);
+  // const { data } = useThingSpeakData(2605389, "2025-02-08T07:40:25Z");
 
   return (
     <>
