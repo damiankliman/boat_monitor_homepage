@@ -1,7 +1,7 @@
 function App() {
   return (
     <>
-      <div>wow</div>
+      <div>B is for Boat Monitor</div>
     </>
   );
 }
