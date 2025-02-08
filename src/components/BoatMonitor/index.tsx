@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   BoatMonitorContainer,
   ChartsContainer,
@@ -6,6 +6,8 @@ import {
 } from "./styles";
 import { createChartDataFromKey } from "@/helpers/chartData";
 import BoatChart from "@/components/BoatChart";
+import Button from "@/components/UI/Button";
+import Dropdown from "../UI/Dropdown";
 // import { useThingSpeakData } from "@/hooks/useThingSpeakData";
 
 const EXAMPLE_API_RESPONSE = {
@@ -509,7 +511,16 @@ type BoatMonitorProps = {
   boat: Boat;
 };
 
+const DATE_RANGE_OPTIONS = [
+  { label: "Last 24 hours", value: "1" },
+  { label: "Last 7 days", value: "7" },
+  { label: "Last 30 days", value: "30" },
+];
+
 const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
+  const [selectedDateRange, setSelectedDateRange] = useState(
+    DATE_RANGE_OPTIONS[0]
+  );
   const { name, thingSpeakChannelId, monitors } = boat;
 
   // const { data } = useThingSpeakData(2605389, "2025-02-08T07:40:25Z");
@@ -518,7 +529,13 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
     <BoatMonitorContainer>
       <ChartsHeaderContainer>
         <h2>{name} Monitor</h2>
-        <div>range dropdown</div>
+        <Dropdown
+          options={DATE_RANGE_OPTIONS}
+          selectedOption={selectedDateRange}
+          onSelect={setSelectedDateRange}
+        >
+          <Button>{selectedDateRange.label}</Button>
+        </Dropdown>
       </ChartsHeaderContainer>
       <ChartsContainer>
         {monitors.map(({ title, key, unitPostfix }) => {
