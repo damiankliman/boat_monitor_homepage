@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import thingspeakClient from "@/api/thingspeakClient";
+import thingSpeakClient from "@/api/thingSpeakClient";
+import type { ThingSpeakResponse } from "@/types/thingSpeakTypes";
 
 interface FetchParams {
   channelId: number;
@@ -9,8 +10,8 @@ interface FetchParams {
 const fetchThingSpeakData = async ({
   channelId,
   results = 10,
-}: FetchParams) => {
-  const response = await thingspeakClient.get(`/${channelId}/feeds.json`, {
+}: FetchParams): Promise<ThingSpeakResponse> => {
+  const response = await thingSpeakClient.get(`/${channelId}/feeds.json`, {
     params: { results },
   });
   return response.data;
