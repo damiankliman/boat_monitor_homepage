@@ -1,7 +1,11 @@
+import { HeaderContainer } from "./styles";
+
 function App() {
   return (
     <>
-      <div>B is for Boat Monitor</div>
+      <HeaderContainer>
+        <h1>B IS FOR BOAT MONITOR</h1>
+      </HeaderContainer>
     </>
   );
 }
