@@ -61,7 +61,6 @@ const Dropdown = <T,>({
         <DropdownMenu
           $isOpen={isOpen}
           onTransitionEnd={() => {
-            console.log("transition end");
             if (!isOpen) {
               setShouldRender(false);
             }
