@@ -1,24 +1,6 @@
+import { BOATS_TO_DISPLAY } from "@/constants";
 import { HeaderContainer, MainContainer } from "./styles";
-import BoatMonitor from "./components/BoatMonitor";
-
-const BOATS_TO_DISPLAY = [
-  {
-    name: "Riva",
-    thingSpeakChannelId: 2605389,
-    monitors: [
-      {
-        title: "Battery Voltage",
-        key: "Voltage",
-        unitPostfix: "v",
-      },
-      {
-        title: "Temperature",
-        key: "Temperature",
-        unitPostfix: "°F",
-      },
-    ],
-  },
-];
+import BoatMonitor from "@/components/BoatMonitor";
 
 function App() {
   return (

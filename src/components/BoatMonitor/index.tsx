@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import { DATA_UPDATE_INTERVAL } from "@/constants";
 import {
   BoatMonitorContainer,
   ChartsContainer,
@@ -29,8 +30,6 @@ type Boat = {
 type BoatMonitorProps = {
   boat: Boat;
 };
-
-const UPDATE_INTERVAL = 11 * 60 * 1000;
 
 enum DATE_RANGE_OPTIONS {
   LAST_24_HOURS = "1",
@@ -86,7 +85,9 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
     if (data?.feeds?.length) {
       const lastFeed = data.feeds[data.feeds.length - 1];
       const lastFeedDate = new Date(lastFeed.created_at);
-      const nextQueryTime = new Date(lastFeedDate.getTime() + UPDATE_INTERVAL);
+      const nextQueryTime = new Date(
+        lastFeedDate.getTime() + DATA_UPDATE_INTERVAL
+      );
       const delay = nextQueryTime.getTime() - Date.now();
 
       const timeout = setTimeout(() => {
