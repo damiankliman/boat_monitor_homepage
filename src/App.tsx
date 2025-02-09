@@ -27,8 +27,8 @@ function App() {
         <h1>B IS FOR BOAT MONITOR</h1>
       </HeaderContainer>
       <MainContainer>
-        {BOATS_TO_DISPLAY.map((boat) => (
-          <BoatMonitor boat={boat} />
+        {BOATS_TO_DISPLAY.map((boat, index) => (
+          <BoatMonitor key={`monitor_${boat.name}_${index}`} boat={boat} />
         ))}
       </MainContainer>
     </>
