@@ -30,5 +30,6 @@ export const useThingSpeakData = (
     queryKey: ["thingSpeakData", channelId, start, end],
     queryFn: () => fetchThingSpeakData({ channelId, start, end }),
     staleTime: DEFAULT_STALE_TIME,
+    placeholderData: (prev) => prev,
   });
 };

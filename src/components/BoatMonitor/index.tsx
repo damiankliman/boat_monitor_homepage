@@ -28,7 +28,7 @@ type BoatMonitorProps = {
   boat: Boat;
 };
 
-const UPDATE_INTERVAL = 1000 * 60 * 10;
+const UPDATE_INTERVAL = 11 * 60 * 1000;
 
 enum DATE_RANGE_OPTIONS {
   LAST_24_HOURS = "1",
@@ -59,30 +59,46 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
   const [selectedDateRange, setSelectedDateRange] = useState(
     DATE_RANGE_OPTIONS.LAST_24_HOURS
   );
-  const [queryTime, setQueryTime] = useState(() =>
-    getOffsetDate(Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value))
+  const [dataStartTime, setDataStartTime] = useState(() =>
+    getOffsetDate(
+      new Date(),
+      Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
+    )
+  );
+
+  const { data } = useThingSpeakData(
+    thingSpeakChannelId,
+    dataStartTime.toISOString()
   );
 
   useEffect(() => {
-    setQueryTime(
-      getOffsetDate(Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value))
+    setDataStartTime(
+      getOffsetDate(
+        new Date(),
+        Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
+      )
     );
   }, [selectedDateRange]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setQueryTime(
-        getOffsetDate(Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value))
-      );
-    }, UPDATE_INTERVAL);
+    if (data?.feeds?.length) {
+      const lastFeed = data.feeds[data.feeds.length - 1];
+      const lastFeedDate = new Date(lastFeed.created_at);
+      const nextQueryTime = new Date(lastFeedDate.getTime() + UPDATE_INTERVAL);
+      const delay = nextQueryTime.getTime() - Date.now();
 
-    return () => clearInterval(interval);
-  }, [selectedDateRange]);
+      const timeout = setTimeout(() => {
+        setDataStartTime(
+          getOffsetDate(
+            nextQueryTime,
+            Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
+          )
+        );
+      }, delay);
 
-  const { data } = useThingSpeakData(
-    thingSpeakChannelId,
-    queryTime.toISOString()
-  );
+      return () => clearTimeout(timeout);
+    }
+  }, [data, selectedDateRange]);
 
   const getLastUpdateDate = () => {
     const lastFeed = data?.feeds[data.feeds.length - 1];
@@ -112,6 +128,7 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
       <ChartsContainer>
         {monitors.map(({ title, key, unitPostfix }) => {
           const chartData = createChartDataFromKey(key, data);
+
           return (
             <BoatChart
               title={title}
