@@ -5,7 +5,7 @@ export const HeaderContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 16px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-outline);
 
   > h1 {
     text-align: center;
