@@ -26,7 +26,7 @@ type BoatChartProps = {
 
 const LINE_COLOR = "#df0505";
 const TICK_STYLE = {
-  stroke: "#ffffff",
+  stroke: "var(--color-text-light)",
   fontSize: "0.8em",
   fontWeight: "300",
 };
