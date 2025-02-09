@@ -68,7 +68,7 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
     )
   );
 
-  const { data, isPending } = useThingSpeakData(
+  const { data, isPending, isFetching } = useThingSpeakData(
     thingSpeakChannelId,
     dataStartTime.toISOString()
   );
@@ -137,9 +137,9 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
             <BoatChart
               key={`chart_${key}_${index}`}
               title={title}
-              height={300}
               data={chartData}
               isPending={isPending}
+              isFetching={isFetching}
               unitPostfix={unitPostfix}
               dateFormatter={
                 DATE_RANGE_OPTIONS_MAP[selectedDateRange].formatter

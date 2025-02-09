@@ -1,3 +1,4 @@
+import { ResponsiveContainer } from "recharts";
 import styled from "styled-components";
 
 export const TooltipContainer = styled.div`
@@ -9,15 +10,35 @@ export const TooltipContainer = styled.div`
   border-radius: var(--border-radius-standard);
 `;
 
-export const ChartLoaderContainer = styled.div<{
-  $height: number;
-}>`
+export const ChartContainer = styled.div`
+  position: relative;
+  height: 300px;
+`;
+
+export const ChartLoaderContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: ${({ $height }) => $height}px;
+  height: 100%;
+  width: 100%;
 
   > svg {
     font-size: 2em;
   }
+`;
+
+export const StyledResponsiveContainer = styled(ResponsiveContainer)<{
+  $isFetching?: boolean;
+}>`
+  opacity: 1;
+  transition: opacity 150ms ease-in-out;
+
+  ${({ $isFetching }) =>
+    $isFetching &&
+    `
+    opacity: 0.5;
+  `}
 `;

@@ -1,12 +1,15 @@
 import { FC } from "react";
-import { ChartLoaderContainer } from "./styles";
+import {
+  ChartContainer,
+  ChartLoaderContainer,
+  StyledResponsiveContainer,
+} from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import {
   CartesianGrid,
   Line,
   LineChart,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -21,9 +24,9 @@ export type ChartData = {
 
 type BoatChartProps = {
   title: string;
-  height: number;
   data: ChartData[];
   isPending?: boolean;
+  isFetching?: boolean;
   unitPostfix?: string;
   dateFormatter?: (value: Date) => string;
 };
@@ -37,53 +40,60 @@ const TICK_STYLE = {
 
 const BoatChart: FC<BoatChartProps> = ({
   title,
-  height,
   data,
   isPending,
+  isFetching,
   unitPostfix,
   dateFormatter,
 }) => {
   return (
     <Card title={title}>
-      {isPending ? (
-        <ChartLoaderContainer $height={height}>
-          <FontAwesomeIcon icon={faArrowsRotate} spin />
-        </ChartLoaderContainer>
-      ) : (
-        <ResponsiveContainer width="100%" height={height}>
-          <LineChart data={data}>
-            <Line
-              dataKey="value"
-              stroke={LINE_COLOR}
-              dot={{ stroke: LINE_COLOR, fill: LINE_COLOR }}
-            />
-            <CartesianGrid
-              stroke="var(--color-outline)"
-              vertical={false}
-              strokeDasharray="3 3"
-            />
-            <XAxis
-              dataKey="date"
-              tickFormatter={dateFormatter}
-              tick={TICK_STYLE}
-              dy={5}
-            />
-            <YAxis
-              unit={unitPostfix}
-              type="number"
-              tickFormatter={(value) => value.toFixed(1)}
-              tick={TICK_STYLE}
-              domain={["dataMin", "auto"]}
-              dx={-5}
-            />
-            <Tooltip
-              content={(props) => (
-                <BoatChartTooltip {...props} unitPostfix={unitPostfix} />
-              )}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      )}
+      <ChartContainer>
+        {isPending || isFetching ? (
+          <ChartLoaderContainer>
+            <FontAwesomeIcon icon={faArrowsRotate} spin />
+          </ChartLoaderContainer>
+        ) : null}
+        {!isPending ? (
+          <StyledResponsiveContainer
+            width="100%"
+            height="100%"
+            $isFetching={isFetching}
+          >
+            <LineChart data={data}>
+              <Line
+                dataKey="value"
+                stroke={LINE_COLOR}
+                dot={{ stroke: LINE_COLOR, fill: LINE_COLOR }}
+              />
+              <CartesianGrid
+                stroke="var(--color-outline)"
+                vertical={false}
+                strokeDasharray="3 3"
+              />
+              <XAxis
+                dataKey="date"
+                tickFormatter={dateFormatter}
+                tick={TICK_STYLE}
+                dy={5}
+              />
+              <YAxis
+                unit={unitPostfix}
+                type="number"
+                tickFormatter={(value) => value.toFixed(1)}
+                tick={TICK_STYLE}
+                domain={["dataMin", "auto"]}
+                dx={-5}
+              />
+              <Tooltip
+                content={(props) => (
+                  <BoatChartTooltip {...props} unitPostfix={unitPostfix} />
+                )}
+              />
+            </LineChart>
+          </StyledResponsiveContainer>
+        ) : null}
+      </ChartContainer>
     </Card>
   );
 };
