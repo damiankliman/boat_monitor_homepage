@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import BoatChartTooltip from "./BoatChartTooltip";
 
 export type ChartData = {
   date: Date;
@@ -65,7 +66,11 @@ const BoatChart: FC<BoatChartProps> = ({
             domain={["dataMin", "auto"]}
             dx={-5}
           />
-          <Tooltip />
+          <Tooltip
+            content={(props) => (
+              <BoatChartTooltip {...props} unitPostfix={unitPostfix} />
+            )}
+          />
         </LineChart>
       </ResponsiveContainer>
     </Card>
