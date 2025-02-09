@@ -117,6 +117,9 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
               title={title}
               data={chartData}
               unitPostfix={unitPostfix}
+              dateFormatter={
+                DATE_RANGE_OPTIONS_MAP[selectedDateRange].formatter
+              }
             />
           );
         })}
