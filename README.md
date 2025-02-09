@@ -62,15 +62,19 @@ To install and run the project locally, follow these steps:
    ```bash
    cd boat_monitor_homepage
    ```
-3. Install dependencies:
+3. Ensure you are using the correct version of node (v20):
+   ```bash
+   nvm use
+   ```
+4. Install dependencies:
    ```bash
    npm install
    ```
-4. Start the development server:
+5. Start the development server:
    ```bash
-   npm start
+   npm run dev
    ```
-5. Once the development server is running, open your browser and navigate to:
+6. Once the development server is running, open your browser and navigate to:
    ```
    http://localhost:5173
    ```
