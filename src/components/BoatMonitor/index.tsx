@@ -126,10 +126,11 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
         </Dropdown>
       </ChartsHeaderContainer>
       <ChartsContainer>
-        {monitors.map(({ title, key, unitPostfix }) => {
+        {monitors.map(({ title, key, unitPostfix }, index) => {
           const chartData = createChartDataFromKey(key, data);
           return (
             <BoatChart
+              key={`chart_${key}_${index}`}
               title={title}
               height={300}
               data={chartData}
