@@ -115,6 +115,7 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
           return (
             <BoatChart
               title={title}
+              height={300}
               data={chartData}
               unitPostfix={unitPostfix}
               dateFormatter={
