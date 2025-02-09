@@ -46,7 +46,7 @@ const BoatChart: FC<BoatChartProps> = ({
   return (
     <Card title={title}>
       {isPending ? (
-        <ChartLoaderContainer height={height}>
+        <ChartLoaderContainer $height={height}>
           <FontAwesomeIcon icon={faArrowsRotate} spin />
         </ChartLoaderContainer>
       ) : (

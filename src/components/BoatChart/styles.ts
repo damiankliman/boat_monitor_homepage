@@ -10,12 +10,12 @@ export const TooltipContainer = styled.div`
 `;
 
 export const ChartLoaderContainer = styled.div<{
-  height: number;
+  $height: number;
 }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: ${({ height }) => height}px;
+  height: ${({ $height }) => $height}px;
 
   > svg {
     font-size: 2em;
