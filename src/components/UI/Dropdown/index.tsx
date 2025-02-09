@@ -1,24 +1,24 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DropdownItem, DropdownMenu, DropdownWrapper } from "./styles";
 
-type DropdownOption = {
+type DropdownOption<T> = {
   label: string;
-  value: string;
+  value: T;
 };
 
-type DropdownProps = {
+type DropdownProps<T> = {
   children: React.ReactNode;
-  options: DropdownOption[];
-  selectedOption: DropdownOption;
-  onSelect: (value: DropdownOption) => void;
+  options: DropdownOption<T>[];
+  selectedOption: T;
+  onSelect: (value: T) => void;
 };
 
-const Dropdown: FC<DropdownProps> = ({
+const Dropdown = <T,>({
   children,
   options,
   selectedOption,
   onSelect,
-}) => {
+}: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -37,8 +37,8 @@ const Dropdown: FC<DropdownProps> = ({
     };
   }, []);
 
-  const handleSelect = (option: DropdownOption) => {
-    onSelect(option);
+  const handleSelect = (option: DropdownOption<T>) => {
+    onSelect(option.value);
     setIsOpen(false);
   };
 
@@ -49,7 +49,7 @@ const Dropdown: FC<DropdownProps> = ({
         {options.map((option) => (
           <DropdownItem
             onClick={() => handleSelect(option)}
-            selected={option.value === selectedOption.value}
+            selected={option.value === selectedOption}
           >
             {option.label}
           </DropdownItem>

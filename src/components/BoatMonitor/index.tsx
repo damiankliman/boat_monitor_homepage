@@ -30,28 +30,50 @@ type BoatMonitorProps = {
 
 const UPDATE_INTERVAL = 1000 * 60 * 10;
 
-const DATE_RANGE_OPTIONS = [
-  { label: "Last 24 hours", value: "1" },
-  { label: "Last 7 days", value: "7" },
-  { label: "Last 30 days", value: "30" },
-];
+enum DATE_RANGE_OPTIONS {
+  LAST_24_HOURS = "1",
+  LAST_7_DAYS = "7",
+  LAST_30_DAYS = "30",
+}
+
+const DATE_RANGE_OPTIONS_MAP = {
+  [DATE_RANGE_OPTIONS.LAST_24_HOURS]: {
+    label: "Last 24 hours",
+    value: DATE_RANGE_OPTIONS.LAST_24_HOURS,
+    formatter: (value: Date) => value.toLocaleTimeString(),
+  },
+  [DATE_RANGE_OPTIONS.LAST_7_DAYS]: {
+    label: "Last 7 days",
+    value: DATE_RANGE_OPTIONS.LAST_7_DAYS,
+    formatter: (value: Date) => value.toLocaleDateString(),
+  },
+  [DATE_RANGE_OPTIONS.LAST_30_DAYS]: {
+    label: "Last 30 days",
+    value: DATE_RANGE_OPTIONS.LAST_30_DAYS,
+    formatter: (value: Date) => value.toLocaleDateString(),
+  },
+};
 
 const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
   const { name, thingSpeakChannelId, monitors } = boat;
   const [selectedDateRange, setSelectedDateRange] = useState(
-    DATE_RANGE_OPTIONS[0]
+    DATE_RANGE_OPTIONS.LAST_24_HOURS
   );
   const [queryTime, setQueryTime] = useState(() =>
-    getOffsetDate(Number(DATE_RANGE_OPTIONS[0].value))
+    getOffsetDate(Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value))
   );
 
   useEffect(() => {
-    setQueryTime(getOffsetDate(Number(selectedDateRange.value)));
+    setQueryTime(
+      getOffsetDate(Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value))
+    );
   }, [selectedDateRange]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setQueryTime(getOffsetDate(Number(selectedDateRange.value)));
+      setQueryTime(
+        getOffsetDate(Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value))
+      );
     }, UPDATE_INTERVAL);
 
     return () => clearInterval(interval);
@@ -77,11 +99,14 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
       <ChartsHeaderContainer>
         <h2>{name} Monitor</h2>
         <Dropdown
-          options={DATE_RANGE_OPTIONS}
+          options={Object.values(DATE_RANGE_OPTIONS_MAP).map((option) => ({
+            label: option.label,
+            value: option.value,
+          }))}
           selectedOption={selectedDateRange}
-          onSelect={setSelectedDateRange}
+          onSelect={(value) => setSelectedDateRange(value)}
         >
-          <Button>{selectedDateRange.label}</Button>
+          <Button>{DATE_RANGE_OPTIONS_MAP[selectedDateRange].label}</Button>
         </Dropdown>
       </ChartsHeaderContainer>
       <ChartsContainer>

@@ -20,12 +20,18 @@ type BoatChartProps = {
   unitPostfix?: string;
 };
 
+const LINE_COLOR = "#df0505";
+
 const BoatChart: FC<BoatChartProps> = ({ title, data, unitPostfix }) => {
   return (
     <Card title={title}>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
-          <Line dataKey="value" stroke="#ffffff" />
+          <Line
+            dataKey="value"
+            stroke={LINE_COLOR}
+            dot={{ stroke: LINE_COLOR, fill: LINE_COLOR }}
+          />
           <CartesianGrid stroke="#ccc" vertical={false} />
           <XAxis
             dataKey="date"
