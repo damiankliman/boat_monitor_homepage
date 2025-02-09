@@ -1,15 +1,18 @@
 import { FC, useEffect, useState } from "react";
+import { DATA_UPDATE_INTERVAL } from "@/constants";
 import {
   BoatMonitorContainer,
   ChartsContainer,
   ChartsFooterContainer,
   ChartsHeaderContainer,
+  StyledButton,
 } from "./styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { createChartDataFromKey } from "@/helpers/chartData";
 import { getOffsetDate } from "@/helpers/date";
 import { useThingSpeakData } from "@/hooks/useThingSpeakData";
 import BoatChart from "@/components/BoatChart";
-import Button from "@/components/UI/Button";
 import Dropdown from "@/components/UI/Dropdown";
 
 type Monitor = {
@@ -27,8 +30,6 @@ type Boat = {
 type BoatMonitorProps = {
   boat: Boat;
 };
-
-const UPDATE_INTERVAL = 1000 * 60 * 10;
 
 enum DATE_RANGE_OPTIONS {
   LAST_24_HOURS = "1",
@@ -59,30 +60,48 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
   const [selectedDateRange, setSelectedDateRange] = useState(
     DATE_RANGE_OPTIONS.LAST_24_HOURS
   );
-  const [queryTime, setQueryTime] = useState(() =>
-    getOffsetDate(Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value))
+  const [dataStartTime, setDataStartTime] = useState(() =>
+    getOffsetDate(
+      new Date(),
+      Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
+    )
+  );
+
+  const { data, isPending, isFetching } = useThingSpeakData(
+    thingSpeakChannelId,
+    dataStartTime.toISOString()
   );
 
   useEffect(() => {
-    setQueryTime(
-      getOffsetDate(Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value))
+    setDataStartTime(
+      getOffsetDate(
+        new Date(),
+        Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
+      )
     );
   }, [selectedDateRange]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setQueryTime(
-        getOffsetDate(Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value))
+    if (data?.feeds?.length) {
+      const lastFeed = data.feeds[data.feeds.length - 1];
+      const lastFeedDate = new Date(lastFeed.created_at);
+      const nextQueryTime = new Date(
+        lastFeedDate.getTime() + DATA_UPDATE_INTERVAL
       );
-    }, UPDATE_INTERVAL);
+      const delay = nextQueryTime.getTime() - Date.now();
 
-    return () => clearInterval(interval);
-  }, [selectedDateRange]);
+      const timeout = setTimeout(() => {
+        setDataStartTime(
+          getOffsetDate(
+            nextQueryTime,
+            Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
+          )
+        );
+      }, delay);
 
-  const { data } = useThingSpeakData(
-    thingSpeakChannelId,
-    queryTime.toISOString()
-  );
+      return () => clearTimeout(timeout);
+    }
+  }, [data, selectedDateRange]);
 
   const getLastUpdateDate = () => {
     const lastFeed = data?.feeds[data.feeds.length - 1];
@@ -106,17 +125,22 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
           selectedOption={selectedDateRange}
           onSelect={(value) => setSelectedDateRange(value)}
         >
-          <Button>{DATE_RANGE_OPTIONS_MAP[selectedDateRange].label}</Button>
+          <StyledButton>
+            {DATE_RANGE_OPTIONS_MAP[selectedDateRange].label}
+            <FontAwesomeIcon icon={faChevronDown} />
+          </StyledButton>
         </Dropdown>
       </ChartsHeaderContainer>
       <ChartsContainer>
-        {monitors.map(({ title, key, unitPostfix }) => {
+        {monitors.map(({ title, key, unitPostfix }, index) => {
           const chartData = createChartDataFromKey(key, data);
           return (
             <BoatChart
+              key={`chart_${key}_${index}`}
               title={title}
-              height={300}
               data={chartData}
+              isPending={isPending}
+              isFetching={isFetching}
               unitPostfix={unitPostfix}
               dateFormatter={
                 DATE_RANGE_OPTIONS_MAP[selectedDateRange].formatter

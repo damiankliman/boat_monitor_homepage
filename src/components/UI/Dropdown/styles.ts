@@ -5,10 +5,10 @@ export const DropdownWrapper = styled.div`
   display: inline-block;
 `;
 
-export const DropdownMenu = styled.div<{ isOpen: boolean }>`
+export const DropdownMenu = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   z-index: 100;
-  top: 100%; /* Opens below the trigger */
+  top: 100%;
   right: 0;
   margin-top: 6px;
   display: flex;
@@ -22,8 +22,8 @@ export const DropdownMenu = styled.div<{ isOpen: boolean }>`
   transition: opacity 150ms ease-in-out;
   opacity: 0;
 
-  ${({ isOpen }) =>
-    isOpen
+  ${({ $isOpen }) =>
+    $isOpen
       ? css`
           opacity: 1;
         `
@@ -33,7 +33,7 @@ export const DropdownMenu = styled.div<{ isOpen: boolean }>`
 `;
 
 export const DropdownItem = styled.div<{
-  selected?: boolean;
+  $selected?: boolean;
 }>`
   padding: 8px;
   cursor: pointer;
@@ -44,8 +44,8 @@ export const DropdownItem = styled.div<{
     background: var(--color-outline);
   }
 
-  ${({ selected }) =>
-    selected &&
+  ${({ $selected }) =>
+    $selected &&
     css`
       background: var(--color-outline);
     `}

@@ -20,7 +20,17 @@ const Dropdown = <T,>({
   onSelect,
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const showDropdown = () => {
+    setShouldRender(true);
+    setTimeout(() => setIsOpen(true), 10);
+  };
+
+  const hideDropdown = () => {
+    setIsOpen(false);
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -28,7 +38,7 @@ const Dropdown = <T,>({
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        hideDropdown();
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -39,22 +49,34 @@ const Dropdown = <T,>({
 
   const handleSelect = (option: DropdownOption<T>) => {
     onSelect(option.value);
-    setIsOpen(false);
+    hideDropdown();
   };
 
   return (
     <DropdownWrapper ref={dropdownRef}>
-      <div onClick={() => setIsOpen((prev) => !prev)}>{children}</div>
-      <DropdownMenu isOpen={isOpen}>
-        {options.map((option) => (
-          <DropdownItem
-            onClick={() => handleSelect(option)}
-            selected={option.value === selectedOption}
-          >
-            {option.label}
-          </DropdownItem>
-        ))}
-      </DropdownMenu>
+      <div onClick={() => (isOpen ? hideDropdown() : showDropdown())}>
+        {children}
+      </div>
+      {shouldRender ? (
+        <DropdownMenu
+          $isOpen={isOpen}
+          onTransitionEnd={() => {
+            if (!isOpen) {
+              setShouldRender(false);
+            }
+          }}
+        >
+          {options.map((option, index) => (
+            <DropdownItem
+              key={`dropdown_item_${option.value}_${index}`}
+              onClick={() => handleSelect(option)}
+              $selected={option.value === selectedOption}
+            >
+              {option.label}
+            </DropdownItem>
+          ))}
+        </DropdownMenu>
+      ) : null}
     </DropdownWrapper>
   );
 };

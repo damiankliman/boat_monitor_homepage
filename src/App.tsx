@@ -1,24 +1,6 @@
+import { BOATS_TO_DISPLAY } from "@/constants";
 import { HeaderContainer, MainContainer } from "./styles";
-import BoatMonitor from "./components/BoatMonitor";
-
-const BOATS_TO_DISPLAY = [
-  {
-    name: "Riva",
-    thingSpeakChannelId: 2605389,
-    monitors: [
-      {
-        title: "Battery Voltage",
-        key: "Voltage",
-        unitPostfix: "v",
-      },
-      {
-        title: "Temperature",
-        key: "Temperature",
-        unitPostfix: "°F",
-      },
-    ],
-  },
-];
+import BoatMonitor from "@/components/BoatMonitor";
 
 function App() {
   return (
@@ -27,8 +9,8 @@ function App() {
         <h1>B IS FOR BOAT MONITOR</h1>
       </HeaderContainer>
       <MainContainer>
-        {BOATS_TO_DISPLAY.map((boat) => (
-          <BoatMonitor boat={boat} />
+        {BOATS_TO_DISPLAY.map((boat, index) => (
+          <BoatMonitor key={`monitor_${boat.name}_${index}`} boat={boat} />
         ))}
       </MainContainer>
     </>

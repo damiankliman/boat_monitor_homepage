@@ -1,5 +1,4 @@
-export const getOffsetDate = (days: number) => {
-  const date = new Date();
+export const getOffsetDate = (date: Date, days: number) => {
   date.setDate(date.getDate() - days);
   return date;
 };
