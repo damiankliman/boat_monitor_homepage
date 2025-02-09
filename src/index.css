@@ -1,16 +1,34 @@
+@font-face {
+  font-family: "DirtyEgo";
+  src: url("/fonts/dirty-ego.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Manrope, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: rgb(24, 24, 24);
+  color-scheme: dark;
+  color: var(--color-text-light);
+  background-color: var(--color-background);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --color-text-light: #dfdfdf;
+  --color-background: #09090b;
+  --color-border: #ffffff;
+  --color-outline: #27272a;
+
+  --border-radius-standard: 4px;
+}
+
+* {
+  margin: 0;
 }
 
 a {
@@ -29,38 +47,61 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-family: DirtyEgo;
+  font-size: 3em;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.8em;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 1.3em;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: inherit;
-  background-color: #1a1a1a;
+  font-size: inherit;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  text-align: center;
+  -webkit-tap-highlight-color: transparent; /* Removes iOS tap highlight */
+  touch-action: manipulation; /* Prevents weird tap behaviors */
 }

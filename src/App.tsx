@@ -1,7 +1,36 @@
+import { HeaderContainer, MainContainer } from "./styles";
+import BoatMonitor from "./components/BoatMonitor";
+
+const BOATS_TO_DISPLAY = [
+  {
+    name: "Riva",
+    thingSpeakChannelId: 2605389,
+    monitors: [
+      {
+        title: "Battery Voltage",
+        key: "Voltage",
+        unitPostfix: "v",
+      },
+      {
+        title: "Temperature",
+        key: "Temperature",
+        unitPostfix: "°F",
+      },
+    ],
+  },
+];
+
 function App() {
   return (
     <>
-      <div>B is for Boat Monitor</div>
+      <HeaderContainer>
+        <h1>B IS FOR BOAT MONITOR</h1>
+      </HeaderContainer>
+      <MainContainer>
+        {BOATS_TO_DISPLAY.map((boat) => (
+          <BoatMonitor boat={boat} />
+        ))}
+      </MainContainer>
     </>
   );
 }
