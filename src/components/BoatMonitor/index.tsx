@@ -4,12 +4,14 @@ import {
   ChartsContainer,
   ChartsFooterContainer,
   ChartsHeaderContainer,
+  StyledButton,
 } from "./styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { createChartDataFromKey } from "@/helpers/chartData";
 import { getOffsetDate } from "@/helpers/date";
 import { useThingSpeakData } from "@/hooks/useThingSpeakData";
 import BoatChart from "@/components/BoatChart";
-import Button from "@/components/UI/Button";
 import Dropdown from "@/components/UI/Dropdown";
 
 type Monitor = {
@@ -122,7 +124,10 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
           selectedOption={selectedDateRange}
           onSelect={(value) => setSelectedDateRange(value)}
         >
-          <Button>{DATE_RANGE_OPTIONS_MAP[selectedDateRange].label}</Button>
+          <StyledButton>
+            {DATE_RANGE_OPTIONS_MAP[selectedDateRange].label}
+            <FontAwesomeIcon icon={faChevronDown} />
+          </StyledButton>
         </Dropdown>
       </ChartsHeaderContainer>
       <ChartsContainer>

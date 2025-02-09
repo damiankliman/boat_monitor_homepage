@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Button from "@/components/UI/Button";
 
 export const BoatMonitorContainer = styled.div`
   display: flex;
@@ -24,4 +25,8 @@ export const ChartsContainer = styled.div`
 export const ChartsFooterContainer = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+export const StyledButton = styled(Button)`
+  gap: 8px;
 `;

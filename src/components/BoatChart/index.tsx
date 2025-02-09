@@ -1,5 +1,7 @@
 import { FC } from "react";
-import Card from "@/components/Card";
+import { ChartLoaderContainer } from "./styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import {
   CartesianGrid,
   Line,
@@ -9,10 +11,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import Card from "@/components/Card";
 import BoatChartTooltip from "./BoatChartTooltip";
-import { ChartLoaderContainer } from "./styles";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 
 export type ChartData = {
   date: Date;
