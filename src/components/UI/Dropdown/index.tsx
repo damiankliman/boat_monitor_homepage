@@ -45,12 +45,12 @@ const Dropdown = <T,>({
   return (
     <DropdownWrapper ref={dropdownRef}>
       <div onClick={() => setIsOpen((prev) => !prev)}>{children}</div>
-      <DropdownMenu isOpen={isOpen}>
+      <DropdownMenu $isOpen={isOpen}>
         {options.map((option, index) => (
           <DropdownItem
             key={`dropdown_item_${option.value}_${index}`}
             onClick={() => handleSelect(option)}
-            selected={option.value === selectedOption}
+            $selected={option.value === selectedOption}
           >
             {option.label}
           </DropdownItem>
