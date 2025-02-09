@@ -21,8 +21,6 @@ type BoatChartProps = {
 };
 
 const BoatChart: FC<BoatChartProps> = ({ title, data, unitPostfix }) => {
-  console.log(data);
-
   return (
     <Card title={title}>
       <ResponsiveContainer width="100%" height={300}>

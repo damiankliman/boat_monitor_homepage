@@ -5,9 +5,13 @@ import type {
 } from "@/types/thingSpeakTypes";
 
 export const createChartDataFromKey = (
-  data: ThingSpeakResponse,
-  key: string
+  key: string,
+  data?: ThingSpeakResponse
 ): ChartData[] => {
+  if (!data) {
+    return [];
+  }
+
   // Check if the key exists in the channel object
   const fieldKey = Object.keys(data.channel).find(
     (field) =>
