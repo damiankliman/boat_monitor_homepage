@@ -20,3 +20,8 @@ export const ChartsContainer = styled.div`
   gap: 16px;
   width: 100%;
 `;
+
+export const ChartsFooterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;

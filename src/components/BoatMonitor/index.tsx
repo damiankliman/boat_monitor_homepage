@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from "react";
 import {
   BoatMonitorContainer,
   ChartsContainer,
+  ChartsFooterContainer,
   ChartsHeaderContainer,
 } from "./styles";
 import { createChartDataFromKey } from "@/helpers/chartData";
@@ -61,6 +62,16 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
     queryTime.toISOString()
   );
 
+  const getLastUpdateDate = () => {
+    const lastFeed = data?.feeds[data.feeds.length - 1];
+
+    if (!lastFeed) {
+      return null;
+    }
+
+    return new Date(lastFeed?.created_at).toLocaleString();
+  };
+
   return (
     <BoatMonitorContainer>
       <ChartsHeaderContainer>
@@ -85,6 +96,9 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
           );
         })}
       </ChartsContainer>
+      <ChartsFooterContainer>
+        <p>Last update: {getLastUpdateDate() || "-"}</p>
+      </ChartsFooterContainer>
     </BoatMonitorContainer>
   );
 };

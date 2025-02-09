@@ -19,6 +19,6 @@ export const MainContainer = styled.div`
   gap: 32px;
   padding: 16px;
   width: auto;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
 `;
