@@ -73,6 +73,8 @@ const BoatChart: FC<BoatChartProps> = ({
               />
               <XAxis
                 dataKey="date"
+                type="category"
+                scale="time"
                 tickFormatter={dateFormatter}
                 tick={TICK_STYLE}
                 dy={5}
