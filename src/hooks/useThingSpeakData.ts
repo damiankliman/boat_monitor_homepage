@@ -11,8 +11,6 @@ interface FetchParams {
   end?: string;
 }
 
-const DEFAULT_STALE_TIME = 1000 * 60;
-
 export const fetchThingSpeakData = async ({
   channelId,
   start,
@@ -39,7 +37,7 @@ export const useThingSpeakData = (
   const dataQuery = useQuery({
     queryKey: ["thingSpeakData", channelId, start, end],
     queryFn: () => fetchThingSpeakData({ channelId, start, end }),
-    staleTime: DEFAULT_STALE_TIME,
+    staleTime: Infinity,
     placeholderData: (prev) => prev,
     enabled: !!start,
   });
@@ -47,7 +45,6 @@ export const useThingSpeakData = (
   const lastEntryQuery = useQuery({
     queryKey: ["thingSpeakLastEntry", channelId],
     queryFn: () => fetchLastThingSpeakEntry(channelId),
-    staleTime: DEFAULT_STALE_TIME,
     placeholderData: (prev) => prev,
   });
 

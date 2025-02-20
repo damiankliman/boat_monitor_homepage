@@ -32,7 +32,7 @@ type BoatMonitorProps = {
 };
 
 enum DATE_RANGE_OPTIONS {
-  LAST_24_HOURS = "3",
+  LAST_24_HOURS = "1",
   LAST_7_DAYS = "7",
   LAST_30_DAYS = "30",
 }
@@ -92,20 +92,31 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
       const nextQueryTime = new Date(
         lastFeedDate.getTime() + DATA_UPDATE_INTERVAL
       );
-      const delay = nextQueryTime.getTime() - Date.now();
+      const offsetTimeFromLastUpdate = nextQueryTime.getTime() - Date.now();
+      const offsetTimeFromNow = DATA_UPDATE_INTERVAL;
+      const delay =
+        offsetTimeFromLastUpdate > 0
+          ? offsetTimeFromLastUpdate
+          : offsetTimeFromNow;
+      const queryStartTime = getOffsetDate(
+        nextQueryTime,
+        Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
+      );
+
+      if (
+        !dataStartTime ||
+        queryStartTime.getTime() !== dataStartTime.getTime()
+      ) {
+        setDataStartTime(queryStartTime);
+      }
 
       const timeout = setTimeout(() => {
-        setDataStartTime(
-          getOffsetDate(
-            nextQueryTime,
-            Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
-          )
-        );
+        setDataStartTime(queryStartTime);
       }, delay);
 
       return () => clearTimeout(timeout);
     }
-  }, [data, lastEntryData, selectedDateRange]);
+  }, [data, lastEntryData, selectedDateRange, dataStartTime]);
 
   const getLastUpdateDate = () => {
     const lastFeed = data?.feeds[data.feeds.length - 1];
