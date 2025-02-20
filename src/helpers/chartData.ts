@@ -1,12 +1,12 @@
 import { ChartData } from "@/components/BoatChart";
 import type {
-  ThingSpeakResponse,
+  ThingSpeakDataResponse,
   ThingSpeakFeed,
 } from "@/types/thingSpeakTypes";
 
 export const createChartDataFromKey = (
   key: string,
-  data?: ThingSpeakResponse
+  data?: ThingSpeakDataResponse
 ): ChartData[] => {
   if (!data) {
     return [];
