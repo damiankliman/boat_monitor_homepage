@@ -32,7 +32,7 @@ type BoatMonitorProps = {
 };
 
 enum DATE_RANGE_OPTIONS {
-  LAST_24_HOURS = "1",
+  LAST_24_HOURS = "3",
   LAST_7_DAYS = "7",
   LAST_30_DAYS = "30",
 }
