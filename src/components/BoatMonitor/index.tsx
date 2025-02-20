@@ -60,31 +60,35 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
   const [selectedDateRange, setSelectedDateRange] = useState(
     DATE_RANGE_OPTIONS.LAST_24_HOURS
   );
-  const [dataStartTime, setDataStartTime] = useState(() =>
-    getOffsetDate(
-      new Date(),
-      Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
-    )
-  );
+  const [dataStartTime, setDataStartTime] = useState<Date | null>(null);
 
-  const { data, isPending, isFetching } = useThingSpeakData(
+  const { dataQuery, lastEntryQuery } = useThingSpeakData(
     thingSpeakChannelId,
-    dataStartTime.toISOString()
+    dataStartTime?.toISOString()
   );
 
-  useEffect(() => {
-    setDataStartTime(
-      getOffsetDate(
-        new Date(),
-        Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
-      )
-    );
-  }, [selectedDateRange]);
+  const {
+    isPending: dataQueryIsPending,
+    isFetching: dataQueryIsFetching,
+    data,
+  } = dataQuery;
+
+  const {
+    isPending: lastEntryQueryIsPending,
+    isFetching: lastEntryQueryIsFetching,
+    data: lastEntryData,
+  } = lastEntryQuery;
 
   useEffect(() => {
-    if (data?.feeds?.length) {
-      const lastFeed = data.feeds[data.feeds.length - 1];
-      const lastFeedDate = new Date(lastFeed.created_at);
+    if (lastEntryData || data) {
+      let lastFeedDate = new Date();
+
+      if (data?.feeds.length) {
+        lastFeedDate = new Date(data.feeds[data.feeds.length - 1].created_at);
+      } else if (lastEntryData) {
+        lastFeedDate = new Date(lastEntryData.created_at);
+      }
+
       const nextQueryTime = new Date(
         lastFeedDate.getTime() + DATA_UPDATE_INTERVAL
       );
@@ -101,7 +105,7 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
 
       return () => clearTimeout(timeout);
     }
-  }, [data, selectedDateRange]);
+  }, [data, lastEntryData, selectedDateRange]);
 
   const getLastUpdateDate = () => {
     const lastFeed = data?.feeds[data.feeds.length - 1];
@@ -139,8 +143,8 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
               key={`chart_${key}_${index}`}
               title={title}
               data={chartData}
-              isPending={isPending}
-              isFetching={isFetching}
+              isPending={dataQueryIsPending || lastEntryQueryIsPending}
+              isFetching={dataQueryIsFetching || lastEntryQueryIsFetching}
               unitPostfix={unitPostfix}
               dateFormatter={
                 DATE_RANGE_OPTIONS_MAP[selectedDateRange].formatter

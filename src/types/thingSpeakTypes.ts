@@ -29,7 +29,7 @@ export interface ThingSpeakFeed {
   field8?: string;
 }
 
-export interface ThingSpeakResponse {
+export interface ThingSpeakDataResponse {
   channel: ThingSpeakChannel;
   feeds: ThingSpeakFeed[];
 }
