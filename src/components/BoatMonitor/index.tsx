@@ -137,7 +137,6 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
   };
 
   const handleDateRangeChange = (value: DATE_RANGE_OPTIONS) => {
-    // If we have data, calculate new start time from the last data point
     if (data?.feeds?.length) {
       const lastFeedDate = new Date(
         data.feeds[data.feeds.length - 1].created_at
