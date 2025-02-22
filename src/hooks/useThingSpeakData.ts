@@ -37,7 +37,6 @@ export const useThingSpeakData = (
   const dataQuery = useQuery({
     queryKey: ["thingSpeakData", channelId, start, end],
     queryFn: () => fetchThingSpeakData({ channelId, start, end }),
-    staleTime: Infinity,
     placeholderData: (prev) => prev,
     enabled: !!start,
   });
@@ -46,6 +45,7 @@ export const useThingSpeakData = (
     queryKey: ["thingSpeakLastEntry", channelId],
     queryFn: () => fetchLastThingSpeakEntry(channelId),
     placeholderData: (prev) => prev,
+    staleTime: Infinity,
   });
 
   return { dataQuery, lastEntryQuery };

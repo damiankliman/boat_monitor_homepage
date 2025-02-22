@@ -61,6 +61,7 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
     DATE_RANGE_OPTIONS.LAST_24_HOURS
   );
   const [dataStartTime, setDataStartTime] = useState<Date | null>(null);
+  const [queryAttempt, setQueryAttempt] = useState(0);
 
   const { dataQuery, lastEntryQuery } = useThingSpeakData(
     thingSpeakChannelId,
@@ -71,6 +72,7 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
     isPending: dataQueryIsPending,
     isFetching: dataQueryIsFetching,
     data,
+    refetch: refetchData,
   } = dataQuery;
 
   const {
@@ -80,43 +82,49 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
   } = lastEntryQuery;
 
   useEffect(() => {
-    if (lastEntryData || data) {
-      let lastFeedDate = new Date();
+    // Initial setup from last entry query
+    if (lastEntryData && !dataStartTime) {
+      const lastFeedDate = new Date(lastEntryData.created_at);
+      const queryStartTime = getOffsetDate(
+        lastFeedDate,
+        Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
+      );
+      setDataStartTime(queryStartTime);
+    }
+  }, [lastEntryData, selectedDateRange, dataStartTime]);
 
-      if (data?.feeds.length) {
-        lastFeedDate = new Date(data.feeds[data.feeds.length - 1].created_at);
-      } else if (lastEntryData) {
-        lastFeedDate = new Date(lastEntryData.created_at);
-      }
-
+  useEffect(() => {
+    // Set up next query based on full data response
+    if (data?.feeds?.length) {
+      const lastFeedDate = new Date(
+        data.feeds[data.feeds.length - 1].created_at
+      );
       const nextQueryTime = new Date(
         lastFeedDate.getTime() + DATA_UPDATE_INTERVAL
       );
-      const offsetTimeFromLastUpdate = nextQueryTime.getTime() - Date.now();
-      const offsetTimeFromNow = DATA_UPDATE_INTERVAL;
-      const delay =
-        offsetTimeFromLastUpdate > 0
-          ? offsetTimeFromLastUpdate
-          : offsetTimeFromNow;
+      const delay = nextQueryTime.getTime() - Date.now();
+
+      // If next query time is in the past, fall back to standard interval
+      const actualDelay = delay > 0 ? delay : DATA_UPDATE_INTERVAL;
+
       const queryStartTime = getOffsetDate(
-        nextQueryTime,
+        lastFeedDate,
         Number(DATE_RANGE_OPTIONS_MAP[selectedDateRange].value)
       );
 
-      if (
-        !dataStartTime ||
-        queryStartTime.getTime() !== dataStartTime.getTime()
-      ) {
-        setDataStartTime(queryStartTime);
-      }
-
       const timeout = setTimeout(() => {
-        setDataStartTime(queryStartTime);
-      }, delay);
+        // Only call refetch if the start time hasn't changed
+        if (dataStartTime?.getTime() === queryStartTime.getTime()) {
+          refetchData();
+          setQueryAttempt((prev) => prev + 1);
+        } else {
+          setDataStartTime(queryStartTime);
+        }
+      }, actualDelay);
 
       return () => clearTimeout(timeout);
     }
-  }, [data, lastEntryData, selectedDateRange, dataStartTime]);
+  }, [data, selectedDateRange, dataStartTime, refetchData, queryAttempt]);
 
   const getLastUpdateDate = () => {
     const lastFeed = data?.feeds[data.feeds.length - 1];
@@ -126,6 +134,20 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
     }
 
     return new Date(lastFeed?.created_at).toLocaleString();
+  };
+
+  const handleDateRangeChange = (value: DATE_RANGE_OPTIONS) => {
+    if (data?.feeds?.length) {
+      const lastFeedDate = new Date(
+        data.feeds[data.feeds.length - 1].created_at
+      );
+      const queryStartTime = getOffsetDate(
+        lastFeedDate,
+        Number(DATE_RANGE_OPTIONS_MAP[value].value)
+      );
+      setDataStartTime(queryStartTime);
+    }
+    setSelectedDateRange(value);
   };
 
   return (
@@ -138,7 +160,7 @@ const BoatMonitor: FC<BoatMonitorProps> = ({ boat }) => {
             value: option.value,
           }))}
           selectedOption={selectedDateRange}
-          onSelect={(value) => setSelectedDateRange(value)}
+          onSelect={handleDateRangeChange}
         >
           <StyledButton>
             {DATE_RANGE_OPTIONS_MAP[selectedDateRange].label}
