@@ -42,3 +42,8 @@ export const StyledResponsiveContainer = styled(ResponsiveContainer)<{
     opacity: 0.5;
   `}
 `;
+
+export const DataPointContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;

@@ -3,6 +3,7 @@ import {
   ChartContainer,
   ChartLoaderContainer,
   StyledResponsiveContainer,
+  DataPointContainer,
 } from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
@@ -47,7 +48,16 @@ const BoatChart: FC<BoatChartProps> = ({
   dateFormatter,
 }) => {
   return (
-    <Card title={title}>
+    <Card
+      title={title}
+      extraComponent={
+        <DataPointContainer>
+          <span>{`${
+            data?.[data?.length - 1]?.value || "- -"
+          } ${unitPostfix}`}</span>
+        </DataPointContainer>
+      }
+    >
       <ChartContainer>
         {isPending || isFetching ? (
           <ChartLoaderContainer>
