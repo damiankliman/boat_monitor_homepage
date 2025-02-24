@@ -30,8 +30,3 @@ export const ChartsFooterContainer = styled.div`
 export const StyledButton = styled(Button)`
   gap: 8px;
 `;
-
-export const DataPointContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;

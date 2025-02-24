@@ -3,6 +3,7 @@ import {
   ChartContainer,
   ChartLoaderContainer,
   StyledResponsiveContainer,
+  DataPointContainer,
 } from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
@@ -16,7 +17,6 @@ import {
 } from "recharts";
 import Card from "@/components/Card";
 import BoatChartTooltip from "./BoatChartTooltip";
-import { DataPointContainer } from "../BoatMonitor/styles";
 
 export type ChartData = {
   date: Date;
