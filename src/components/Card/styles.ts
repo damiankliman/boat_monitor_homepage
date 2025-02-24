@@ -8,7 +8,14 @@ export const CardContainer = styled.div`
   border: 1px solid var(--color-outline);
   border-radius: var(--border-radius-standard);
 
-  > div {
+  > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  > div:last-child {
     width: 100%;
   }
 `;
