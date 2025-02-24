@@ -10,10 +10,12 @@ type CardProps = {
 const Card: FC<CardProps> = ({ title, extraComponent, children }) => {
   return (
     <CardContainer>
-      <div>
-        {title ? <h3>{title}</h3> : null}
-        {extraComponent}
-      </div>
+      {title || extraComponent ? (
+        <div>
+          {title ? <h3>{title}</h3> : null}
+          {extraComponent}
+        </div>
+      ) : null}
       <div>{children}</div>
     </CardContainer>
   );

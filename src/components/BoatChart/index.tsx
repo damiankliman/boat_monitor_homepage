@@ -16,6 +16,7 @@ import {
 } from "recharts";
 import Card from "@/components/Card";
 import BoatChartTooltip from "./BoatChartTooltip";
+import { DataPointContainer } from "../BoatMonitor/styles";
 
 export type ChartData = {
   date: Date;
@@ -47,7 +48,16 @@ const BoatChart: FC<BoatChartProps> = ({
   dateFormatter,
 }) => {
   return (
-    <Card title={title}>
+    <Card
+      title={title}
+      extraComponent={
+        <DataPointContainer>
+          <span>{`${
+            data?.[data?.length - 1]?.value || "- -"
+          } ${unitPostfix}`}</span>
+        </DataPointContainer>
+      }
+    >
       <ChartContainer>
         {isPending || isFetching ? (
           <ChartLoaderContainer>

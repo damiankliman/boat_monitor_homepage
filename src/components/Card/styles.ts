@@ -8,11 +8,12 @@ export const CardContainer = styled.div`
   border: 1px solid var(--color-outline);
   border-radius: var(--border-radius-standard);
 
-  > div:first-child {
+  > div:first-child:not(:only-child) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   > div:last-child {
